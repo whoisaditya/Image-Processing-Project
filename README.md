@@ -1,4 +1,15 @@
-Made by 
-20BCE2044 ADITYA MITRA
-20BCT0269 ANANYA THAKRE
-20BDS0071 ADITYA DEODESHMUKH
+## Contributors
+
+<table>
+<tr align="center">
+
+
+<td>
+Aditya Mitra
+
+<td>
+Ananya Thakre
+
+<td>
+Aditya Deodeshmukh
+</table>
