@@ -12,5 +12,8 @@ def get_Disparity(img_L,img_R,L_Map_X,L_Map_Y,R_Map_X,R_Map_Y):
     
     disp=stereo.compute(L_adg_img,R_adg_img)
     disp=disp.astype(np.float32)
+    disp = (disp/16.0 - min_disparity)/num_disparities
+    return disp
+
 
 
