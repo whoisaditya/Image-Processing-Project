@@ -1,6 +1,11 @@
 import numpy as np
 import cv2
-
+cv_file = cv2.FileStorage("data/stereo_rectify_maps.xml", cv2.FILE_STORAGE_READ)
+L_St_Map_x = cv_file.getNode("Left_Stereo_Map_x").mat()
+L_St_Map_y = cv_file.getNode("Left_Stereo_Map_y").mat()
+R_St_Map_x = cv_file.getNode("Right_Stereo_Map_x").mat()
+R_St_Map_y = cv_file.getNode("Right_Stereo_Map_y").mat()
+cv_file.release()
 cap = cv2.VideoCapture(0) # Video Input from Laptop Webcam
 cap1 = cv2.VideoCapture(1) # Video Input from External Webcam
 
