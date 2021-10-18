@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-
+from get_disparity_map import get_Disparity
 
 # Camera parameters to undistort and rectify images
 cv_file = cv2.FileStorage()
@@ -25,10 +25,14 @@ while(cap_right.isOpened() and cap_left.isOpened()):
     # Undistort and rectify images
     frame_right = cv2.remap(frame_right, stereoMapR_x, stereoMapR_y, cv2.INTER_LANCZOS4, cv2.BORDER_CONSTANT, 0)
     frame_left = cv2.remap(frame_left, stereoMapL_x, stereoMapL_y, cv2.INTER_LANCZOS4, cv2.BORDER_CONSTANT, 0)
+
+    # Disparity Map + Preprocessing
+    var = get_Disparity(frame_left,frame_right)
                      
     # Show the frames
     cv2.imshow("frame right", frame_right) 
     cv2.imshow("frame left", frame_left)
+    cv2.imshow("Disparity Map", var)
 
 
     # Hit "q" to close the window

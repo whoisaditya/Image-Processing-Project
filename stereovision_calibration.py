@@ -108,4 +108,3 @@ cv_file.write('stereoMapR_x',stereoMapR[0])
 cv_file.write('stereoMapR_y',stereoMapR[1])
 
 cv_file.release()
-
