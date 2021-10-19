@@ -29,13 +29,11 @@ def get_Disparity(img_L,img_R):
     stereo.setPreFilterType(1)
     stereo.setPreFilterSize(7)
     stereo.setTextureThreshold(17)
-    stereo.setUniquenessRatio(1)
+    stereo.setUniquenessRatio(2)
     stereo.setSpeckleRange(100)
-    stereo.setSpeckleWindowSize(100)
+    stereo.setSpeckleWindowSize(200)
     stereo.setDisp12MaxDiff(100)
     
-
-
     disp = stereo.compute(img_L_grey,img_R_grey)
     disp = disp.astype(np.float32)
     disp = (disp/(5*16.0) - min_disparity)/num_disparities

@@ -20,8 +20,8 @@ while cap.isOpened():
         print("images saved!")
         num += 1
 
-    cv2.imshow('Img 1',img)
-    cv2.imshow('Img 2',img2)
+    cv2.imshow('Left',img)
+    cv2.imshow('Right',img2)
 
 # Release and destroy all windows before termination
 cap.release()
