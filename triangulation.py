@@ -4,25 +4,26 @@ import numpy as np
 import time
 
 
-def find_depth(right_point, left_point, frame_right, frame_left, baseline,f, alpha):
+def get_depth(right_pt, left_pt, frame_right, frame_left, B,f, alpha):
 
-    # CONVERT FOCAL LENGTH f FROM [mm] TO [pixel]:
-    height_right, width_right, depth_right = frame_right.shape
-    height_left, width_left, depth_left = frame_left.shape
+    # Converting Focal length from mm to pixels
+    heightL, widthL, depth_left = frame_left.shape
+    heightR, widthR, depth_right = frame_right.shape
+    
 
-    if width_right == width_left:
-        f_pixel = (width_right * 0.5) / np.tan(alpha * 0.5 * np.pi/180)
+    if widthR == widthL:
+        f_pixel = (widthR * 0.5) / np.tan(alpha * 0.5 * np.pi/180)
 
     else:
-        print('Left and right camera frames do not have the same pixel width')
+        print('Left and right cameras not same')
 
-    x_right = right_point[0]
-    x_left = left_point[0]
+    xR = right_pt[0]
+    xL = left_pt[0]
 
-    # CALCULATE THE DISPARITY:
-    disparity = x_left-x_right      #Displacement between left and right frames [pixels]
+    # Calculate Disparity
+    disparity = xL-xR     
 
-    # CALCULATE DEPTH z:
-    zDepth = (baseline*f_pixel)/disparity             #Depth in [cm]
+    # Depth calc
+    zDepth = (B*f_pixel)/disparity           
 
     return zDepth
