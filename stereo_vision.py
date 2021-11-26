@@ -65,9 +65,9 @@ with facedect.FaceDetection(min_detection_confidence=0.7) as face_detection:
             if faces_right.detections:
                 for id, detection in enumerate(faces_right.detections):
                     mp_draw.draw_detection(frame_right, detection)
-                    bBox = detection.location_data.relative_bounding_box
-                    h, w, c = frame_right.shape
-                    boundBox = int(bBox.xmin * w), int(bBox.ymin * h), int(bBox.width * w), int(bBox.height * h)
+                    bnd_box = detection.location_data.relative_bounding_box
+                    hR, wR, cR = frame_right.shape
+                    boundBox = int(bnd_box.xmin * wR), int(bnd_box.ymin * hR), int(bnd_box.width * wR), int(bnd_box.height * hR)
                     center_pt_R = (boundBox[0] + boundBox[2] / 2, boundBox[1] + boundBox[3] / 2)
                     cv2.putText(frame_right, f'{int(detection.score[0]*100)}%', (boundBox[0], boundBox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 2)
 
@@ -75,9 +75,9 @@ with facedect.FaceDetection(min_detection_confidence=0.7) as face_detection:
             if faces_left.detections:
                 for id, detection in enumerate(faces_left.detections):
                     mp_draw.draw_detection(frame_left, detection)
-                    bBox = detection.location_data.relative_bounding_box
-                    h, w, c = frame_left.shape
-                    boundBox = int(bBox.xmin * w), int(bBox.ymin * h), int(bBox.width * w), int(bBox.height * h)
+                    bnd_box = detection.location_data.relative_bounding_box
+                    hL, wL, cL = frame_left.shape
+                    boundBox = int(bnd_box.xmin * wL), int(bnd_box.ymin * hL), int(bnd_box.width * wL), int(bnd_box.height * hL)
                     center_pt_L = (boundBox[0] + boundBox[2] / 2, boundBox[1] + boundBox[3] / 2)
                     cv2.putText(frame_left, f'{int(detection.score[0]*100)}%', (boundBox[0], boundBox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 2)
 
@@ -85,8 +85,8 @@ with facedect.FaceDetection(min_detection_confidence=0.7) as face_detection:
 
 
             if not faces_right.detections or not faces_left.detections:
-                cv2.putText(window, "TRACKING LOST", (800,280), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255),2)
-                cv2.putText(window, "TRACKING LOST", (80,280), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255),2)
+                cv2.putText(window, "NO FACE", (800,280), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255),2)
+                cv2.putText(window, "NO FACE", (80,280), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255),2)
 
             else:
                 depth = tri.get_depth(center_pt_R, center_pt_L, frame_right, frame_left, B, f, alpha)
