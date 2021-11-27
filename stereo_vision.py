@@ -12,6 +12,8 @@ import calibration
 # Mediapipe for face detection
 import mediapipe as mp
 import time
+
+# Creating the Dashboard
 WINDOW_SIZE=(10,1080,3)
 facedect = mp.solutions.face_detection
 mp_draw = mp.solutions.drawing_utils
@@ -26,17 +28,24 @@ window_cpy=window
 cap_right = cv2.VideoCapture(2, cv2.CAP_DSHOW)                    
 cap_left =  cv2.VideoCapture(1, cv2.CAP_DSHOW)
 
-frame_rate = 120    
+# Frame rate
+frame_rate = 120
+
+# Distance between cameras
 B = 11               
+
+# focal length of cameras
 f = 20               
+ 
+# feild of view of cameras
 alpha = 56.6 
 
 with facedect.FaceDetection(min_detection_confidence=0.7) as face_detection:
 
     while(cap_right.isOpened() and cap_left.isOpened()):
-
-        isRight, frame_right = cap_right.read()
         isLeft, frame_left = cap_left.read()
+        isRight, frame_right = cap_right.read()
+       
         window=np.copy(window_cpy)
         frame_right, frame_left = calibration.undistortRectify(frame_right, frame_left)
         if not isRight or not isLeft:                    
@@ -46,29 +55,35 @@ with facedect.FaceDetection(min_detection_confidence=0.7) as face_detection:
 
             start = time.time()
             
-            
-            frame_right = cv2.cvtColor(frame_right, cv2.COLOR_BGR2RGB)
             frame_left = cv2.cvtColor(frame_left, cv2.COLOR_BGR2RGB)
-            
+            frame_right = cv2.cvtColor(frame_right, cv2.COLOR_BGR2RGB)
             
             faces_right = face_detection.process(frame_right)
             faces_left = face_detection.process(frame_left)
 
-            
-            frame_right = cv2.cvtColor(frame_right, cv2.COLOR_RGB2BGR)
             frame_left = cv2.cvtColor(frame_left, cv2.COLOR_RGB2BGR)
-
+            frame_right = cv2.cvtColor(frame_right, cv2.COLOR_RGB2BGR)
+            
+            centerL = 0
 
             centerR = 0
-            centerL = 0
+            
 
             if faces_right.detections:
                 for id, detection in enumerate(faces_right.detections):
                     mp_draw.draw_detection(frame_right, detection)
                     bnd_box = detection.location_data.relative_bounding_box
                     hR, wR, cR = frame_right.shape
-                    boundBox = int(bnd_box.xmin * wR), int(bnd_box.ymin * hR), int(bnd_box.width * wR), int(bnd_box.height * hR)
-                    center_pt_R = (boundBox[0] + boundBox[2] / 2, boundBox[1] + boundBox[3] / 2)
+                    X_min=bnd_box.xmin
+                    Y_min=bnd_box.ymin
+                    bd_width=bnd_box.width
+                    bd_height=bnd_box.height
+                    boundBox = int(X_min * wR), int(Y_min * hR), int(bd_width * wR), int(bd_height * hR)
+                    x=boundBox[0]
+                    w=boundBox[2]
+                    y=boundBox[1]
+                    h=boundBox[3]
+                    center_pt_R = (x + w/ 2, y + h / 2)
                     cv2.putText(frame_right, f'{int(detection.score[0]*100)}%', (boundBox[0], boundBox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 2)
 
 
@@ -77,8 +92,16 @@ with facedect.FaceDetection(min_detection_confidence=0.7) as face_detection:
                     mp_draw.draw_detection(frame_left, detection)
                     bnd_box = detection.location_data.relative_bounding_box
                     hL, wL, cL = frame_left.shape
-                    boundBox = int(bnd_box.xmin * wL), int(bnd_box.ymin * hL), int(bnd_box.width * wL), int(bnd_box.height * hL)
-                    center_pt_L = (boundBox[0] + boundBox[2] / 2, boundBox[1] + boundBox[3] / 2)
+                    X_min=bnd_box.xmin
+                    Y_min=bnd_box.ymin
+                    bd_width=bnd_box.width
+                    bd_height=bnd_box.height
+                    boundBox = int(X_min * wL), int(Y_min * hL), int(bd_width * wL), int(bd_height * hL)
+                    x=boundBox[0]
+                    w=boundBox[2]
+                    y=boundBox[1]
+                    h=boundBox[3]
+                    center_pt_L = (x + w/ 2, y + h / 2)
                     cv2.putText(frame_left, f'{int(detection.score[0]*100)}%', (boundBox[0], boundBox[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 2)
 
 
